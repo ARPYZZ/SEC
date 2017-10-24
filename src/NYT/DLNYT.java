@@ -10,6 +10,9 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jsoup.Jsoup;
@@ -26,6 +29,9 @@ public class DLNYT extends javax.swing.JFrame {
             URL url = null;
             url = new URL("https://www.nytimes.com/");
 
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            
             try (ReadableByteChannel chan = Channels.newChannel(url.openStream())) {
                 ByteBuffer buf = ByteBuffer.allocate(90000);
                 byte[] array = buf.array();
@@ -39,7 +45,7 @@ public class DLNYT extends javax.swing.JFrame {
                     Document doc = Jsoup.parse(s);
 
                     for (Element headline : doc.select("h2.story-heading")) {
-                        g.jTextArea1.append(headline.text() + " -NYT" + "\n");
+                        g.jTextArea1.append(headline.text() + " -NYT " + "(" + dateFormat.format(date) + ")" + "\n");
                         
                     }
                     Thread.sleep(500);
@@ -48,7 +54,7 @@ public class DLNYT extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //g.setVisible(true);
+            g.setVisible(true);
         }
 
 //        g.revalidate();

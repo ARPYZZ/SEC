@@ -10,6 +10,9 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -27,6 +30,10 @@ public class DLWASH extends javax.swing.JFrame {
         while (true) {
             URL url = null;
             url = new URL("https://www.washingtonpost.com/");
+            
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            //System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
 
             try (ReadableByteChannel chan = Channels.newChannel(url.openStream())) {
                 ByteBuffer buf = ByteBuffer.allocate(90000);
@@ -41,7 +48,7 @@ public class DLWASH extends javax.swing.JFrame {
                     Document doc = Jsoup.parse(s);
 
                     for (Element headline : doc.select("div.headline")) {
-                        g.jTextArea1.append(headline.text() + " -WASH" + "\n");
+                        g.jTextArea1.append(headline.text() + " -WASH " + "(" + dateFormat.format(date) + ")" + "\n");
                         
                     }
                     Thread.sleep(500);
@@ -50,7 +57,7 @@ public class DLWASH extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //g.setVisible(true);
+            g.setVisible(true);
         }
 
 //        g.revalidate();
